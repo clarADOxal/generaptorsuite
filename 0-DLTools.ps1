@@ -3,6 +3,22 @@
 # Path to deploy tools :
 $toolpath = "D:\Tools"
 
+############################### Run in Admin ##############################
+
+# Check Admin Rights 
+$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+if (-not $isAdmin) {
+    Write-Host "Droits d'administrateur non détectés. Relance du script avec élévation..." -ForegroundColor Yellow
+    
+    # 2. Relance le script actuel avec l'argument "RunAs" (Administrateur)
+    Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+    
+    # 3. Quitte la session actuelle non-administrateur
+    Exit
+}
+
+
 ############################### Folder generation ##############################
 cls
 # Check if folder not exists, and create it
@@ -43,6 +59,13 @@ Invoke-WebRequest `
 cd $toolpath
 write-host -fore red Agree on the other window
 winget install -e --id DBBrowserForSQLite.DBBrowserForSQLite  --silent --accept-package-agreements --accept-source-agreements
+
+#Create ShortCut
+$Shell = New-Object -ComObject Wscript.Shell
+$Shortcut = $Shell.CreateShortcut("$PWD\DB Browser for SQLite.lnk")
+$Shortcut.TargetPath = (Resolve-Path "C:\Program Files\DB Browser for SQLite\DB Browser for SQLite.exe").providerpath
+$Shortcut.Save()
+
 ############################### NIRSOFT ##############################
 cd $toolpath
 
