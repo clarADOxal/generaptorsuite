@@ -100,6 +100,105 @@ if (-not $isAdmin)
 		  -UseBasicParsing
 		Expand-Archive chromecacheview.zip -DestinationPath chromecacheview
 		del chromecacheview.zip
+
+#TaskSchedulerView v1.74
+#LastActivityView v1.37
+#ShadowCopyView v1.16
+#VaultPasswordView v1.12
+#MadPassExt v1.00
+#Remote Desktop PassView v1.02
+#LSASecretsView v1.26
+#LSASecretsDump v1.21
+#WifiHistoryView v1.66
+#NetworkOpenedFiles v1.63 ?
+#ImageCacheViewer v1.34
+#WebCacheImageInfo v1.36
+#BrowserAutoFillView v1.00
+#WebBrowserBookmarksView v1.13
+#BrowserDownloadsView v1.51
+#BrowserAddonsView v1.30
+#MyLastSearch v1.66
+#FavoritesView v1.32
+
+#RegFileExport v1.11
+
+#AlternateStreamView v1.58
+
+#USBDeview v3.10
+#USBDriveLog v1.15
+
+#WinDefLogView v1.05
+#WinDefThreatsView v1.15
+
+#OpenedFilesView v1.91
+#FolderChangesView v2.37
+
+#ShadowCopyView v1.16
+#PreviousFilesRecovery v1.10
+#LastActivityView v1.37
+#OpenSaveFilesView v1.16
+#ExecutedProgramsList v1.15
+
+#TaskSchedulerView v1.74
+#LoadedDllsView v1.06
+
+#SecuritySoftView v1.00
+
+#FolderTimeUpdate v1.75
+#AppCompatibilityView v1.10
+#JumpListsView v1.16
+
+#BatteryHistoryView v1.06
+#WhatInStartup v1.35
+
+#WinPrefetchView v1.37
+#AppCrashView v1.35
+
+#TurnedOnTimesView v1.46
+#WinLogOnView v1.41
+
+#OfflineRegistryView v1.05
+#OfflineRegistryFinder v1.12
+
+#MUICacheView v1.01
+#ShellBagsView v1.35
+#UserAssistView v1.02
+#FullEventLogView v1.81
+#MyEventViewer v2.25
+#EventLogSourcesView v1.00
+
+#RecentFilesView v1.33
+#InjectedDLL v1.00
+#ServiWin v1.72
+
+#ESEDatabaseView v1.79
+#ExifDataView v1.15
+#CSVFileView v2.66
+
+#HashMyFiles v2.51
+
+#https://download.nirsoft.net/nirsoft_package_enc_1.30.25.zip
+# nirsoft9876$
+
+#?winget install --id NirSoft.NirLauncher -e --source winget --accept-package-agreements --accept-source-agreements
+
+		############################### GIT ##############################
+		winget install --id Git.Git -e --source winget --accept-package-agreements --accept-source-agreements --silent
+
+
+		############################### SysInternals ##############################
+		cd $toolpath
+		mkdir SYSINTERNALS
+		CD SYSINTERNALS
+		Invoke-WebRequest `
+		  -Uri "https://download.sysinternals.com/files/SysinternalsSuite.zip" `
+		  -OutFile "$PWD\SysinternalsSuite.zip" `
+		  -UseBasicParsing
+		Expand-Archive SysinternalsSuite.zip -DestinationPath SysinternalsSuite
+		del SysinternalsSuite.zip
+
+
+
 		}
 	# Working...
 	write-host "WORKING..."
