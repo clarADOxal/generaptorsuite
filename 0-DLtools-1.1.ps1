@@ -5,20 +5,22 @@ param (
 
 Write-host "Welcome to : MyEzGui"
 Write-host "===================="
+Sleep 3
 
 $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if (-not $isAdmin)
 	{
 	Write-Host "Droits d'administrateur non détectés. Relance du script avec élévation..." -ForegroundColor Yellow
-        Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`" -FolderToAnalyze `"$FolderToAnalyze`"" -WorkingDirectory "$PSScriptRoot" -Verb RunAs
-        Exit
+	Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`" -FolderToAnalyze `"$FolderToAnalyze`"" -WorkingDirectory "$PSScriptRoot" -Verb RunAs
+	Exit
 	}
 	else
 	{
 	# Test if Tools folder exist (Utilisation d'un chemin absolu avec $PSScriptRoot pour éviter System32)
 	$toolpath = "$PSScriptRoot\tools"
 
-	$Toolavailable = Test-Path -Path $toolpath -PathType Container
+	$Toolavailable = Test-Path -LiteralPath  $toolpath -PathType Container
+
 
 	if (!$Toolavailable)
 		{
@@ -200,8 +202,47 @@ if (-not $isAdmin)
 
 
 		}
+	#cls
 	# Working...
+	#write-host -fore green "Tools seems available..."
 	write-host "WORKING..."
+	$FolderToAnalyzeavailable = Test-Path -LiteralPath $FolderToAnalyze -PathType Container
+	if (!$FolderToAnalyzeavailable){write-host -fore red "Repertoire non trouvé :  $FolderToAnalyze "; exit}
+
+
+	$out = "$PSScriptRoot\out"
+	New-Item -ItemType Directory -Force -Path $out | Out-Null
+
+	$in=$FolderToAnalyze
+	write-host -fore green "Tools : " $toolpath
+	write-host -fore green "IN    : " $in
+	write-host -fore green "OUT   : " $out
+
+	#MFT
+	#USNJRNL
+	
+	$usersPath = Join-Path $in "Users"
+
+
+	if (Test-Path -LiteralPath $usersPath) {
+		write-host -fore blue "   PowerShell History"
+		$listeUser = (Get-ChildItem -LiteralPath $usersPath -Directory).Name
+	
+		foreach ($user in $listeUser) {
+		$historyFile = Join-Path $usersPath "$user\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt"
+		#write-host -fore blue $historyFile
+	    
+		if (Test-Path -LiteralPath $historyFile)
+			{
+			$destFile = Join-Path $out "ConsoleHost_history_$user.txt"
+			copy-item -LiteralPath $historyFile -Destination $destFile -Force
+			}
+		}
+	}
+
+
+
+
 	sleep
 	}
 
